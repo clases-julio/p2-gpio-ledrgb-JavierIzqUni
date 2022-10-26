@@ -108,3 +108,11 @@ while True:
         GPIO.cleanup()
         break
     
+
+#-------Use cases-------
+# Input red ----> Output led red
+# Input Red ----> Output Nothing
+# Input white --> Output led white
+# Input 24 -----> Output Nothing
+# Input End ----> Output End program
+#-----------------------
