@@ -1,6 +1,5 @@
-# ledRGB.py
-# Practica 2. Sensores y actuadores. URJC. Julio Vega
-# Codigo de ejemplo de uso del LED RGB
+# Practica 2. Se encarga de encender los colores
+# primarios y varias mezclas de colores de un led
 
 import time, sys
 import RPi.GPIO as GPIO
