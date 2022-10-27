@@ -1,5 +1,20 @@
 # p2-gpio-ledrgb
-## Execution
+## Execution of Ejercicio 2
+To run the program, execute the command that you prefer
+```bash
+python3 main.py                   # Terminal interface
+python3 main.py --interface       # Graphical interface
+```
+### Terminal
+The list of available commands is:
+```bash
+> colorName                             # Change to color
+> r g b                                 # Change to the rgb values (255-0) input
+> [On/on/Encender/encender] colorName   # Turn on color
+> [Off/off/Apagar/apagar] colorName     # Turn off color
+> Add colorName                         # Add custom color with that name
+> [End/Exit/Fin]                        # Exit the program, led turn off
+```
 
 ## Hardware problems
 Before entering the software part, we needed to check if the led worked properly. 
@@ -19,6 +34,9 @@ Also in this excercise we didn't use any OOP.
 
 ### Ejercicio 2
 This program is divided into four different files in order to make the code look cleaner.
+
+The problem we encountered was that we weren't able to change the intesity of the RGB led, so we could just have the colors be 255 or 0. Fortunately, in the end using the pulse width modulator, PWM, we were able to change the intensity of the color.
+
 #### Main file
 This file contains the main program and is the file that has to be executed.
 
@@ -45,7 +63,7 @@ if command in self.onOrder:
   # Do something
 ```
 
-The commands available are listed in the [execution segment](#execution)
+The commands available are listed in the [execution segment](#terminal)
 
 #### Qt interface file
 This file contains the AppQt class that contains the graphical interface.
@@ -60,4 +78,29 @@ def closeEvent(self, event):
 ```
 
 #### RGB led file
-This file contains the LedRGB that is responsible of controlling the rgb led.
+This file contains the LedRGB that is responsible of controlling the rgb led, and has the next features:
+
+1. Initialize and cleans the GPIO pins
+2. Control RGB values for On and Off
+3. Works with leds with both polarities
+
+The problem stated [above](#ejercicio-2) created another problem. This was that the RGB values have a range of values between 0 and 255, but with the PWM the values could only be between 0 and 100. So in order to chose the correct value
+we have to convert the RGB values to the corresponding PWM value.
+```python
+# Check if the blue value is in range
+if b > 255: b = 255
+if b < 0: b = 0
+
+# Change the value from the range 255-0 to 100-0
+if b == 0:
+  bInt = 0
+else:
+  bInt = int((b*100)/255)
+```
+
+Another problem was that the led can have the polarity changed, so to solve this issue we use the following approach:
+```python
+# If the led is inverted, revert the value
+if self.__isInverted:
+  bInt = 100 - bInt 
+```
