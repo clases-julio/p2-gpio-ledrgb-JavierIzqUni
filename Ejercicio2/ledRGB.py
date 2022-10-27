@@ -1,14 +1,14 @@
 # RGB led class for the ledRGBMain.py program
 
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 
 class LedRGB():
   def __init__(self, redPin:int, greenPin:int, bluePin:int, inverted:bool = False):
 
     # Set the GPIO mode to board
-    # self.GPIO = GPIO
-    # self.GPIO.setmode(GPIO.BOARD) # Select pin number mode 
+    self.GPIO = GPIO
+    self.GPIO.setmode(GPIO.BOARD) # Select pin number mode 
 
     # If the led is inverted then the behavior is reversed
     self.__isInverted = inverted
@@ -55,8 +55,7 @@ class LedRGB():
       rInt = 100 - rInt 
 
     # Change the red value
-    print(f"Red on {rInt}")
-    # self.__redInt.ChangeDutyCycle(rInt)
+    self.__redInt.ChangeDutyCycle(rInt)
   
   def setG(self, g:int):
     """Set the green value"""
@@ -76,8 +75,7 @@ class LedRGB():
       gInt = 100 - gInt 
 
     # Change the green value
-    print(f"Green on {gInt}")
-    # self.__greenInt.ChangeDutyCycle(gInt)
+    self.__greenInt.ChangeDutyCycle(gInt)
 
   def setB(self, b:int):
     """Set the blue value"""
@@ -98,23 +96,24 @@ class LedRGB():
 
 
     # Change the blue value
-    print(f"Blue on {bInt}")
-    # self.__blueInt.ChangeDutyCycle(bInt)
+    self.__blueInt.ChangeDutyCycle(bInt)
   
   def initColor(self,pin:int):
     """Initialice the color pin"""
-    print(f"{pin} init")
-    pinInt = 0
-    # GPIO.setup(pin, GPIO.OUT) # Change pin mode to output
-    # pinInt = self.GPIO.PWM(pin,100)
-    # pinInt.start(100)
+    GPIO.setup(pin, GPIO.OUT) # Change pin mode to output
+    pinInt = self.GPIO.PWM(pin,100)
+
+    if not self.__isInverted:
+      pinInt.start(0) # Led is off (RGB value od 0,0,0)
+    else:
+      pinInt.start(100) # Led is off (RGB value od 0,0,0)
+    
     return pinInt
-  
+
   def clean(self):
     """Clean the GPIO channels"""
     self.off()
-    print("Cleanup")
-    # self.GPIO.cleanup()
+    self.GPIO.cleanup()
   
   def getRGB(self):
     """Return the current RGB values"""

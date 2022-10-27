@@ -8,8 +8,8 @@ from ledSelectorBash import AppBash
 
 # Pin numbers
 rojoPin = 11
-azulPin = 13
-verdePin = 15
+azulPin = 15
+verdePin = 13
   
 if __name__ == '__main__':
   if (len(sys.argv) > 1):

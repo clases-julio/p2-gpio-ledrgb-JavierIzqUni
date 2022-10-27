@@ -1,42 +1,43 @@
 # Practica 2. Se encarga de encender los colores
 # primarios y varias mezclas de colores de un led
 
-import time, sys
 import RPi.GPIO as GPIO
 
 # Pin numbers
 rojoPin = 11
-azulPin = 13
-verdePin = 15
+azulPin = 15
+verdePin = 13
 
 # Turn on pin
-def encender(pin):
+def encender(pin,intensity = 100):
     GPIO.setmode(GPIO.BOARD) # Select pin number mode 
     GPIO.setup(pin, GPIO.OUT) # Change pin mode to output
-    GPIO.output(pin, GPIO.LOW) # Turn on pin
+    pwm = GPIO.PWM(pin,100) # Start PWM
+    intensity = 100 - intensity
+    pwm.start(intensity) # Turn on pin
 
 # Turn off pin
 def apagar(pin):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.HIGH)
+    GPIO.output(pin, GPIO.HIGH) # Turn off pin
 
 # -------Primary colors-----------
 # Turn on the red pin
-def encenderRojo():
-    encender(rojoPin)
+def encenderRojo(intensity = 100):
+    encender(rojoPin,intensity)
 def apagarRojo():
     apagar(rojoPin)
 
 # Turn on the blue pin
-def encenderAzul():
-    encender(azulPin)
+def encenderAzul(intensity = 100):
+    encender(azulPin,intensity)
 def apagarAzul():
     apagar(azulPin)
     
 # Turn on the green pin
-def encenderVerde():
-    encender(verdePin)
+def encenderVerde(intensity = 100):
+    encender(verdePin,intensity)
 def apagarVerde():
     apagar(verdePin)
 #---------------------------------
@@ -48,7 +49,14 @@ def encenderAmarillo():
 def apagarAmarillo():
     apagarRojo()
     apagarVerde()
-    
+
+def encenderNaranja():
+    encenderRojo()
+    encenderVerde(50)
+def apagarNaranja():
+    apagarRojo()
+    apagarVerde()
+
 def encenderMagenta():
     encenderAzul()
     encenderRojo()
@@ -74,44 +82,37 @@ def apagarBlanco():
 
 #--------------------------------
 
-# Main program
-i=0
-while True:
-    order = input("Input a color to change('End' to exit)") # Ask the user to choose the color
-    if (i==1):
-        remove() # Turns off the color when you change between colors
-    i=1
-    if (order == "red"):
-        encenderRojo()
-        remove = apagarRojo
-    elif (order == "blue"):
-        encenderAzul()
-        remove = apagarAzul
-    elif (order == "green"):
-        encenderVerde()
-        remove = apagarVerde
-    elif (order == "yellow"):
-        encenderAmarillo()
-        remove = apagarAmarillo
-    elif (order == "magenta"):
-        encenderMagenta()
-        remove = apagarMagenta
-    elif (order == "cyan"):
-        encenderCyan()
-        remove = apagarCyan
-    elif (order == "white"):
-        encenderBlanco()
-        remove = apagarBlanco
-    elif (order == "End"):
-        #Clean the pins used
-        GPIO.cleanup()
-        break
-    
+# Main program. Uncomment the lines below to change the color
+# # -----Rojo-----
+# encenderRojo()
+# apagarRojo
+# # -----Azul-----
+# encenderAzul()
+# apagarAzul()
+# # ----Verde-----
+# encenderVerde()
+# apagarVerde()
+# # ---Amarillo---
+# encenderAmarillo()
+# apagarAmarillo()
+# # ---Magenta----
+# encenderMagenta()
+# apagarMagenta()
+# # -----Cyan-----
+# encenderCyan()
+# apagarCyan()
+# # ----Blanco----
+# encenderBlanco()
+# apagarBlanco()
+# # ---Naranja----
+# encenderNaranja()
+# apagarNaranja()
+# #----------------
+
+#Clean the pins used
+GPIO.cleanup()    
 
 #-------Use cases-------
-# Input red ----> Output led red
-# Input Red ----> Output Nothing
-# Input white --> Output led white
-# Input 24 -----> Output Nothing
-# Input End ----> Output End program
+# Uncomment red ----> Output led red
+# Uncomment white --> Output led white
 #-----------------------
